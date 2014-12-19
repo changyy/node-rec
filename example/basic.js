@@ -60,7 +60,7 @@ console.log('[INFO] RAW MONGODB COLLECTION: '+raw_mongodb_collection);
 console.log('[INFO] RECOMMENDED MONGODB COLLECTION: '+recommended_mongodb_collection);
 
 async.series([
-/*
+//*
 	// Step 0: reset data
 	function(callback) {
 		db.dropDatabase(target_mongodb, function() {
@@ -124,7 +124,7 @@ async.series([
 			callback(null, '[DONE] Step 6 & 7: Item-based Co-Occurrence Matrix:\t' + data);
 		});
 	},
-/*
+//*
 	// Step 8: build user prefer (fast version)
 	function(callback) {
 		calc.build_user_prefer_via_user_item_pair(target_mongodb, meta_user_item, meta_uniq_item, meta_co_matrix, meta_user_prefer, function(data) {
