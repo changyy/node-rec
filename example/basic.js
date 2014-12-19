@@ -60,137 +60,89 @@ console.log('[INFO] RAW MONGODB COLLECTION: '+raw_mongodb_collection);
 console.log('[INFO] RECOMMENDED MONGODB COLLECTION: '+recommended_mongodb_collection);
 
 async.series([
-
-	// Step 0: import data
+/*
+	// Step 0: reset data
 	function(callback) {
-		import_data(function(data){
-			callback(null, data);
+		db.dropDatabase(target_mongodb, function() {
+			callback(null, '[DONE] Step 0: Reset database');
 		});
 	},
-	// Step 1: build user-item based record
+
+	// Step 1: import data
+	function(callback) {
+		db.import_by_stream(target_mongodb, raw_mongodb_collection, process.stdout, raw_input ? fs.createReadStream(raw_input) : process.stdin , raw_split_by, function(data) {
+			callback(null, '[DONE] Step 1: Import data count:\t\t\t'+ data);
+		});
+	},
+
+	// Step 2: build user-item based record
 	function(callback) {
 		calc.build_user_item_pair_with_sum_value(target_mongodb, raw_mongodb_collection, 'user', 'item', 'value', meta_user_item, function(data) {
-			callback(null, data);
+			callback(null, '[DONE] Step 2: build user-item based record:\t\t' +data);
 		});
 	},
 
-	// Step 2: find uniq user (fast version)
+	// Step 3: find uniq user (fast version)
 	function(callback) {
 		calc.find_uniq_target_via_user_item_pair(target_mongodb, meta_user_item, 'user', meta_uniq_user, function(data) {
-			callback(null, data);
+			callback(null, '[DONE] Step 3: find uniq user:\t\t\t\t'+data);
 		});
 	},
-	//// Step 2: find uniq user
-	//function(callback) {
-	//	calc.find_uniq_target(target_mongodb, raw_mongodb_collection, 'user', meta_uniq_user, function(data) {
-	//		callback(null, data);
-	//	});
-	//},
 
-	// Step 3: find uniq item (fast version)
+	// Step 4: find uniq item (fast version)
 	function(callback) {
 		calc.find_uniq_target_via_user_item_pair(target_mongodb, meta_user_item, 'item', meta_uniq_item, function(data) {
-			callback(null, data);
+			callback(null, '[DONE] Step 4: find uniq item:\t\t\t\t'+data);
 		});
 	},
 
-	//// Step 3: find uniq item
-	//function(callback) {
-	//	calc.find_uniq_target(target_mongodb, raw_mongodb_collection, 'item', meta_uniq_item, function(data) {
-	//		callback(null, data);
-	//	});
-	//},
-
-	// Step 4: build user-item list (fast version)
+	// Step 5: build user-item list (fast version)
 	function(callback) {
 		calc.build_user_item_list_via_user_item_pair(target_mongodb, meta_user_item, 'user', 'item', meta_user_item_list, function(data) {
-			callback(null, data);
+			callback(null, '[DONE] Step 5: build user-item list:\t\t\t'+data);
 		});
 	},
-
-	// Step 4: build user-item list
-	//function(callback) {
-	//	calc.build_user_item_list(target_mongodb, raw_mongodb_collection, 'user', 'item', meta_user_item_list, function(data) {
-	//		callback(null, data);
-	//	});
-	//},
-
-	// Step 5: Item-based Co-Occurrence Matrix - init
+// */
+/*
+	// Step 6: Item-based Co-Occurrence Matrix - init
 	function(callback) {
 		calc.build_item_based_co_occurrence_matrix_prepare(target_mongodb, meta_user_item_list, 'item', meta_co_matrix_init, function(data) {
-			callback(null, data);
+			callback(null, '[DONE] Step 6: Item-based Co-Occurrence Matrix - init:\t' + data);
 		});
 	},
 
-	// Step 6: Item-based Co-Occurrence Matrix - done
+	// Step 7: Item-based Co-Occurrence Matrix - done
 	function(callback) {
 		calc.build_item_based_co_occurrence_matrix(target_mongodb, meta_co_matrix_init, 'key', 'value', meta_co_matrix, function(data) {
-			callback(null, data);
+			callback(null, '[DONE] Step 7: Item-based Co-Occurrence Matrix - done:\t' + data);
 		});
 	},
-
-	// Step 7: build user prefer (fast version)
+// */
+	// Step 6&7: Item-based Co-Occurrence Matrix via MapReduce
+	function(callback) {
+		calc.build_item_based_co_occurrence_matrix_prepare(target_mongodb, meta_user_item_list, 'item', meta_co_matrix, function(data) {
+			callback(null, '[DONE] Step 6 & 7: Item-based Co-Occurrence Matrix:\t' + data);
+		});
+	},
+/*
+	// Step 8: build user prefer (fast version)
 	function(callback) {
 		calc.build_user_prefer_via_user_item_pair(target_mongodb, meta_user_item, meta_uniq_item, meta_co_matrix, meta_user_prefer, function(data) {
-			callback(null, data);
+			callback(null, '[DONE] Step 8: build user prefer:\t\t\t' + data);
 		});
 	},
-	// Step 7: build user prefer
-	//function(callback) {
-	//	calc.build_user_prefer(target_mongodb, raw_mongodb_collection, meta_uniq_item, meta_co_matrix, meta_user_prefer, function(data) {
-	//		callback(null, data);
-	//	});
-	//},
 
-	// Step 8: build recommendation
+	// Step 9: build recommendation
 	function(callback) {
 		calc.build_recommendation(target_mongodb, meta_user_prefer, 'user', 'item', 'value', recommended_mongodb_collection, function(data) {
-			callback(null, data);
+			callback(null, '[DONE] Step 9: build recommendation:\t\t\t' + data);
 		});
-	},
-	// Step #: clear 
-	function(callback) {
-		callback(null, 0);
 	},
 // */
 ], function(err, result){
 	if (err)
 		console.log(err);
-	console.log( 'DONE' );
+	console.log("\n\n");
 	for (var i=0, cnt=result.length ; i<cnt ; ++i)
 		console.log(result[i]);
 });
-
-
-//
-// import data
-//
-//db.insert(target_mongodb, raw_mongodb_collection, 'user','item', 99);
-//db.bulk_load(target_mongodb, raw_mongodb_collection, [
-//	{ user : 'u1', item : 'i1', value: 0 },
-//	{ user : 'u2', item : 'i2', value: 1 }
-//]);
-function import_data(callback) {
-	var input_from = process.stdin;
-	if (raw_input) 
-		input_from = fs.createReadStream(raw_input);
-	
-	var rl = readline.createInterface({
-		input: input_from,
-		output: process.stdout,
-		terminal: false
-	});
-	var records = [];
-	rl.on('line', function(line){
-		//console.log(line)
-		var field = line.split(raw_split_by);
-		if (field.length == 3)
-			records.push( { user: field[0] , item: field[1], value : parseFloat(field[2]) } );
-	}).on('close', function() {
-		db.bulk_load(target_mongodb, raw_mongodb_collection, records, function(){
-			console.log('[INFO] raw import, record count: '+records.length);
-			if(callback)
-				callback(records.length);
-		});
-	});
-}

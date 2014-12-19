@@ -22,21 +22,21 @@ user_item
 user_item_list
 user_prefer
 > db.recommendation.find()
-{ "_id" : { "user" : "a", "item" : "1" }, "value" : 3.4 }
-{ "_id" : { "user" : "a", "item" : "2" }, "value" : 1 }
-{ "_id" : { "user" : "a", "item" : "3" }, "value" : 7.2 }
-{ "_id" : { "user" : "a", "item" : "4" }, "value" : 6.2 }
-{ "_id" : { "user" : "a", "item" : "5" }, "value" : 1 }
-{ "_id" : { "user" : "b", "item" : "1" }, "value" : 1.2 }
-{ "_id" : { "user" : "b", "item" : "2" }, "value" : 1.7999999999999998 }
-{ "_id" : { "user" : "b", "item" : "3" }, "value" : 4.2 }
-{ "_id" : { "user" : "b", "item" : "4" }, "value" : 2.4 }
-{ "_id" : { "user" : "b", "item" : "5" }, "value" : 1.7999999999999998 }
-{ "_id" : { "user" : "c", "item" : "1" }, "value" : 1.7999999999999998 }
-{ "_id" : { "user" : "c", "item" : "2" }, "value" : 0.4 }
-{ "_id" : { "user" : "c", "item" : "3" }, "value" : 4 }
-{ "_id" : { "user" : "c", "item" : "4" }, "value" : 3.5999999999999996 }
-{ "_id" : { "user" : "c", "item" : "5" }, "value" : 0.4 }
+{ "_id" : { "user" : "a", "item" : "1" }, "value" : 1.7000000000000002 }
+{ "_id" : { "user" : "a", "item" : "2" }, "value" : 0.5 }
+{ "_id" : { "user" : "a", "item" : "3" }, "value" : 3.6 }
+{ "_id" : { "user" : "a", "item" : "4" }, "value" : 3.1 }
+{ "_id" : { "user" : "a", "item" : "5" }, "value" : 0.5 }
+{ "_id" : { "user" : "b", "item" : "1" }, "value" : 0.6 }
+{ "_id" : { "user" : "b", "item" : "2" }, "value" : 0.8999999999999999 }
+{ "_id" : { "user" : "b", "item" : "3" }, "value" : 2.1 }
+{ "_id" : { "user" : "b", "item" : "4" }, "value" : 1.2 }
+{ "_id" : { "user" : "b", "item" : "5" }, "value" : 0.8999999999999999 }
+{ "_id" : { "user" : "c", "item" : "1" }, "value" : 0.8999999999999999 }
+{ "_id" : { "user" : "c", "item" : "2" }, "value" : 0.2 }
+{ "_id" : { "user" : "c", "item" : "3" }, "value" : 2 }
+{ "_id" : { "user" : "c", "item" : "4" }, "value" : 1.7999999999999998 }
+{ "_id" : { "user" : "c", "item" : "5" }, "value" : 0.2 }
 >
 ```
 MongoDB Sharded Cluster Usage
