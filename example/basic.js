@@ -49,9 +49,6 @@ for (var i=0, len=myArgs.length ; i<len ; ++i) {
 			break;
 	}
 }
-//process.argv.forEach(function (val, index, array) {
-	//console.log(index + ': ' + val);
-//});
 
 console.log('[INFO] INPUT: '+ (raw_input|| "stdin") );
 console.log('[INFO] INPUT FILED BY: '+raw_split_by);
@@ -60,7 +57,6 @@ console.log('[INFO] RAW MONGODB COLLECTION: '+raw_mongodb_collection);
 console.log('[INFO] RECOMMENDED MONGODB COLLECTION: '+recommended_mongodb_collection);
 
 async.series([
-//*
 	// Step 0: reset data
 	function(callback) {
 		db.dropDatabase(target_mongodb, function() {
@@ -102,7 +98,6 @@ async.series([
 			callback(null, '[DONE] Step 5: build user-item list:\t\t\t'+data);
 		});
 	},
-// */
 /*
 	// Step 6: Item-based Co-Occurrence Matrix - init
 	function(callback) {
@@ -118,13 +113,14 @@ async.series([
 		});
 	},
 // */
+
 	// Step 6&7: Item-based Co-Occurrence Matrix via MapReduce
 	function(callback) {
 		calc.build_item_based_co_occurrence_matrix_prepare(target_mongodb, meta_user_item_list, 'item', meta_co_matrix, function(data) {
 			callback(null, '[DONE] Step 6 & 7: Item-based Co-Occurrence Matrix:\t' + data);
 		});
 	},
-//*
+
 	// Step 8: build user prefer (fast version)
 	function(callback) {
 		calc.build_user_prefer_via_user_item_pair(target_mongodb, meta_user_item, meta_uniq_item, meta_co_matrix, meta_user_prefer, function(data) {
@@ -138,7 +134,6 @@ async.series([
 			callback(null, '[DONE] Step 9: build recommendation:\t\t\t' + data);
 		});
 	},
-// */
 ], function(err, result){
 	if (err)
 		console.log(err);
