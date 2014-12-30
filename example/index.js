@@ -109,7 +109,7 @@ async.series([
 
 	// Step 7: build user prefer (fast version)
 	function(callback) {
-		calc.build_user_prefer_via_user_item_pair(target_mongodb, meta_uniq_user, meta_user_item, meta_co_matrix, meta_user_prefer_prepare, meta_user_prefer, function(data) {
+		calc.build_user_prefer_via_user_item_pair(target_mongodb, meta_uniq_user, meta_uniq_item, meta_user_item, meta_co_matrix, meta_user_prefer_prepare, meta_user_prefer, function(data) {
 			callback(null, '[DONE] Step 7: build user prefer:\t\t\t' + data);
 		});
 	},
