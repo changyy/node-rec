@@ -17,8 +17,7 @@ var meta_uniq_item = 'item';
 var meta_user_item_list = 'user_item_list';
 var meta_co_matrix_init = 'co_matrix_init';
 var meta_co_matrix = 'co_matrix';
-var meta_user_prefer_prepare = 'user_prefer_prepare';
-var meta_user_prefer = 'user_prefer';
+var meta_matrix_multiplication_usage = 'matrix_multiplication_usage';
 
 var myArgs = process.argv.slice(2);
 for (var i=0, len=myArgs.length ; i<len ; ++i) {
@@ -107,20 +106,12 @@ async.series([
 		});
 	},
 
-	// Step 7: build user prefer (fast version)
+	// Step 7: build recommendation
 	function(callback) {
-		calc.build_user_prefer_via_user_item_pair(target_mongodb, meta_uniq_user, meta_uniq_item, meta_user_item, meta_co_matrix, meta_user_prefer_prepare, meta_user_prefer, function(data) {
-			callback(null, '[DONE] Step 7: build user prefer:\t\t\t' + data);
+		calc.build_user_prefer_via_user_item_pair(target_mongodb, meta_uniq_user, meta_uniq_item, meta_user_item, meta_co_matrix, meta_matrix_multiplication_usage, recommended_mongodb_collection, function(data) {
+			callback(null, '[DONE] Step 7: build user item recommendation:\t\t' + data);
 		});
 	},
-/*
-	// Step 8: build recommendation
-	function(callback) {
-		calc.build_recommendation(target_mongodb, meta_user_prefer, 'user', 'item', 'value', recommended_mongodb_collection, function(data) {
-			callback(null, '[DONE] Step 9: build recommendation:\t\t\t' + data);
-		});
-	},
-//  */
 ], function(err, result){
 	if (err)
 		console.log(err);
