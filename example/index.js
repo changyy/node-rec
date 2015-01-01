@@ -73,6 +73,8 @@ async.series([
 
 	// Step 2: build user-item based record
 	function(callback) {
+		var moment = require('moment');
+		console.log ('[INFO] building user-item pair @ ' + moment().format());
 		calc.build_user_item_pair_with_sum_value(target_mongodb, raw_mongodb_collection, 'user', 'item', 'value', meta_user_item, function(data) {
 			callback(null, '[DONE] Step 2: build user-item based record:\t\t' +data);
 		});
@@ -80,6 +82,8 @@ async.series([
 
 	// Step 3: find uniq user (fast version)
 	function(callback) {
+		var moment = require('moment');
+		console.log ('[INFO] building uniq user @ ' + moment().format());
 		calc.find_uniq_target_via_user_item_pair(target_mongodb, meta_user_item, 'user', meta_uniq_user, function(data) {
 			callback(null, '[DONE] Step 3: find uniq user:\t\t\t\t'+data);
 		});
@@ -87,6 +91,8 @@ async.series([
 
 	// Step 4: find uniq item (fast version)
 	function(callback) {
+		var moment = require('moment');
+		console.log ('[INFO] building uniq item @ ' + moment().format());
 		calc.find_uniq_target_via_user_item_pair(target_mongodb, meta_user_item, 'item', meta_uniq_item, function(data) {
 			callback(null, '[DONE] Step 4: find uniq item:\t\t\t\t'+data);
 		});
@@ -94,6 +100,8 @@ async.series([
 
 	// Step 5: build user-item list (fast version)
 	function(callback) {
+		var moment = require('moment');
+		console.log ('[INFO] building user-item list @ ' + moment().format());
 		calc.build_user_item_list_via_user_item_pair(target_mongodb, meta_user_item, 'user', 'item', meta_user_item_list, function(data) {
 			callback(null, '[DONE] Step 5: build user-item list:\t\t\t'+data);
 		});
@@ -101,6 +109,8 @@ async.series([
 
 	// Step 6: build Item-based Co-Occurrence Matrix
 	function(callback) {
+		var moment = require('moment');
+		console.log ('[INFO] building co-occurrence matrix @ ' + moment().format());
 		calc.build_item_based_co_occurrence_matrix(target_mongodb, meta_user_item_list, 'item', meta_co_matrix, function(data) {
 			callback(null, '[DONE] Step 6: Item-based Co-Occurrence Matrix:\t\t' + data);
 		});
@@ -108,8 +118,10 @@ async.series([
 
 	// Step 7: build recommendation
 	function(callback) {
-		calc.build_user_prefer_via_user_item_pair(target_mongodb, meta_uniq_user, meta_uniq_item, meta_user_item, meta_co_matrix, meta_matrix_multiplication_usage, recommended_mongodb_collection, function(data) {
-			callback(null, '[DONE] Step 7: build user item recommendation:\t\t' + data);
+		var moment = require('moment');
+		console.log ('[INFO] building recommendation @ ' + moment().format());
+		calc.build_recommendation(target_mongodb, meta_uniq_user, meta_uniq_item, meta_user_item, meta_co_matrix, meta_matrix_multiplication_usage, recommended_mongodb_collection, function(data) {
+			callback(null, '[DONE] Step 7: build user-item-based recommendation:\t' + data);
 		});
 	},
 ], function(err, result){
