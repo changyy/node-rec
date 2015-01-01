@@ -4,7 +4,7 @@ Basic Usage
 ``` 
 $ cd example
 $ npm inatall
-$ NODE_PATH=node_modules node basic.js -file example.input
+$ NODE_PATH=node_modules node . -file example.input
 $ mongo
 MongoDB shell version: 2.6.6
 connecting to: test
@@ -81,7 +81,7 @@ db.user.ensureIndex( { _id : "hashed" } )
 db.item.ensureIndex( { _id : "hashed" } )
 db.user_item.ensureIndex( { _id : "hashed" } )
 db.user_item_list.ensureIndex( { _id : "hashed" } )
-db.co_matrix_init.ensureIndex( { _id : "hashed" } )
+db.co_matrix_prepare.ensureIndex( { _id : "hashed" } )
 db.co_matrix.ensureIndex( { _id : "hashed" } )
 db.user_prefer.ensureIndex( { _id : "hashed" } )
 
@@ -91,7 +91,7 @@ sh.shardCollection("test.user", { "_id": "hashed" } )
 sh.shardCollection("test.item", { "_id": "hashed" } )
 sh.shardCollection("test.user_item", { "_id": "hashed" } )
 sh.shardCollection("test.user_item_list", { "_id": "hashed" } )
-sh.shardCollection("test.co_matrix_init", { "_id": "hashed" } )
+sh.shardCollection("test.co_matrix_prepare", { "_id": "hashed" } )
 sh.shardCollection("test.co_matrix", { "_id": "hashed" } )
 sh.shardCollection("test.user_prefer", { "_id": "hashed" } )
 
@@ -130,27 +130,6 @@ mongos> sh.status()
                         { "_id" : NumberLong("5590551598570865843") } -->> { "_id" : NumberLong("6734679053800461050") } on : shard0000 Timestamp(2, 27)
                         { "_id" : NumberLong("6734679053800461050") } -->> { "_id" : NumberLong("7960684350713852271") } on : shard0000 Timestamp(2, 14)
                         { "_id" : NumberLong("7960684350713852271") } -->> { "_id" : { "$maxKey" : 1 } } on : shard0000 Timestamp(2, 15)
-                test.co_matrix_init
-                        shard key: { "_id" : "hashed" }
-                        chunks:
-                                shard0001       8
-                                shard0000       8
-                        { "_id" : { "$minKey" : 1 } } -->> { "_id" : NumberLong("-8273661641891500633") } on : shard0001 Timestamp(2, 28)
-                        { "_id" : NumberLong("-8273661641891500633") } -->> { "_id" : NumberLong("-7128867908986402561") } on : shard0001 Timestamp(2, 29)
-                        { "_id" : NumberLong("-7128867908986402561") } -->> { "_id" : NumberLong("-5887475106763575171") } on : shard0001 Timestamp(2, 14)
-                        { "_id" : NumberLong("-5887475106763575171") } -->> { "_id" : NumberLong("-4611686018427387902") } on : shard0001 Timestamp(2, 15)
-                        { "_id" : NumberLong("-4611686018427387902") } -->> { "_id" : NumberLong("-3521379966431327755") } on : shard0001 Timestamp(2, 22)
-                        { "_id" : NumberLong("-3521379966431327755") } -->> { "_id" : NumberLong("-2407555618055086870") } on : shard0001 Timestamp(2, 23)
-                        { "_id" : NumberLong("-2407555618055086870") } -->> { "_id" : NumberLong("-1252390023469112773") } on : shard0001 Timestamp(2, 20)
-                        { "_id" : NumberLong("-1252390023469112773") } -->> { "_id" : NumberLong(0) } on : shard0001 Timestamp(2, 21)
-                        { "_id" : NumberLong(0) } -->> { "_id" : NumberLong("1090526924659439601") } on : shard0000 Timestamp(2, 24)
-                        { "_id" : NumberLong("1090526924659439601") } -->> { "_id" : NumberLong("2212302713894731266") } on : shard0000 Timestamp(2, 25)
-                        { "_id" : NumberLong("2212302713894731266") } -->> { "_id" : NumberLong("3370465195328972409") } on : shard0000 Timestamp(2, 18)
-                        { "_id" : NumberLong("3370465195328972409") } -->> { "_id" : NumberLong("4611686018427387902") } on : shard0000 Timestamp(2, 19)
-                        { "_id" : NumberLong("4611686018427387902") } -->> { "_id" : NumberLong("5685422844092282678") } on : shard0000 Timestamp(2, 26)
-                        { "_id" : NumberLong("5685422844092282678") } -->> { "_id" : NumberLong("6788179045201999247") } on : shard0000 Timestamp(2, 27)
-                        { "_id" : NumberLong("6788179045201999247") } -->> { "_id" : NumberLong("7890065760118582765") } on : shard0000 Timestamp(2, 16)
-                        { "_id" : NumberLong("7890065760118582765") } -->> { "_id" : { "$maxKey" : 1 } } on : shard0000 Timestamp(2, 17)
                 test.item
                         shard key: { "_id" : "hashed" }
                         chunks:
@@ -211,5 +190,5 @@ Run:
 ```
 $ cd example
 $ npm inatall
-$ NODE_PATH=node_modules node basic.js -file example.input -mongodb-db server4_ip:30001/test
+$ NODE_PATH=node_modules node . -file example.input -mongodb-db server4_ip:30001/test
 ```
