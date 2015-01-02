@@ -14,10 +14,11 @@ var recommended_mongodb_collection = 'recommendation';
 var meta_user_item = 'user_item';
 var meta_uniq_user = 'user';
 var meta_uniq_item = 'item';
-var meta_user_item_list = 'user_item_list';
-var meta_co_matrix_init = 'co_matrix_init';
+//var meta_user_item_list = 'user_item_list';	// no use
+var meta_co_matrix_prepare = 'co_matrix_prepare';
+var meta_user_item_filter = 'user_item_filter';
 var meta_co_matrix = 'co_matrix';
-var meta_matrix_multiplication_usage = 'matrix_multiplication_usage';
+var meta_matrix_multiplication_usage = 'rec_matrix_mul_usage';
 
 var myArgs = process.argv.slice(2);
 for (var i=0, len=myArgs.length ; i<len ; ++i) {
@@ -98,23 +99,34 @@ async.series([
 		});
 	},
 
-	// Step 5: build user-item list (fast version)
-	function(callback) {
-		var moment = require('moment');
-		console.log ('[INFO] building user-item list @ ' + moment().format());
-		calc.build_user_item_list_via_user_item_pair(target_mongodb, meta_user_item, 'user', 'item', meta_user_item_list, function(data) {
-			callback(null, '[DONE] Step 5: build user-item list:\t\t\t'+data);
-		});
-	},
+	//// Step 5: build user-item list (fast version)
+	//function(callback) {
+	//	var moment = require('moment');
+	//	console.log ('[INFO] building user-item list @ ' + moment().format());
+	//	calc.build_user_item_list_via_user_item_pair(target_mongodb, meta_user_item, 'user', 'item', meta_user_item_list, function(data) {
+	//		callback(null, '[DONE] Step 5: build user-item list:\t\t\t'+data);
+	//	});
+	//},
 
-	// Step 6: build Item-based Co-Occurrence Matrix
+	//// Step 6: build Item-based Co-Occurrence Matrix
+	//function(callback) {
+	//	var moment = require('moment');
+	//	console.log ('[INFO] building co-occurrence matrix @ ' + moment().format());
+	//	calc.build_item_based_co_occurrence_matrix(target_mongodb, meta_user_item_list, 'item', meta_co_matrix, function(data) {
+	//		callback(null, '[DONE] Step 6: Item-based Co-Occurrence Matrix:\t\t' + data);
+	//	});
+	//},
+
+	// Step 5 & 6: build Item-based Co-Occurrence Matrix
 	function(callback) {
 		var moment = require('moment');
 		console.log ('[INFO] building co-occurrence matrix @ ' + moment().format());
-		calc.build_item_based_co_occurrence_matrix(target_mongodb, meta_user_item_list, 'item', meta_co_matrix, function(data) {
-			callback(null, '[DONE] Step 6: Item-based Co-Occurrence Matrix:\t\t' + data);
+		calc.build_item_based_co_occurrence_matrix(target_mongodb, meta_user_item, meta_uniq_user, meta_user_item_filter, meta_co_matrix_prepare, meta_co_matrix, function(data) {
+			callback(null, '[DONE] Step 5&6: Item-based Co-Occurrence Matrix:\t' + data);
 		});
 	},
+
+
 
 	// Step 7: build recommendation
 	function(callback) {
