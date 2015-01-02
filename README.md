@@ -5,6 +5,35 @@ Basic Usage
 $ cd example
 $ npm inatall
 $ NODE_PATH=node_modules node . -file example.input
+$ time NODE_PATH=node_modules node index.js -file example.input 
+[INFO] INPUT: example.input
+[INFO] INPUT FILED BY: |
+[INFO] TARGET MONGODB DB: localhost/test
+[INFO] RAW MONGODB COLLECTION: raw
+[INFO] RECOMMENDED MONGODB COLLECTION: recommendation
+                [2015-01-02T10:38:05+00:00] raw import, record count: 8
+[INFO] raw import, total record count: 8 @ 2015-01-02T10:38:05+00:00
+[INFO] building user-item pair @ 2015-01-02T10:38:05+00:00
+[INFO] building uniq user @ 2015-01-02T10:38:05+00:00
+[INFO] building uniq item @ 2015-01-02T10:38:05+00:00
+[INFO] building co-occurrence matrix @ 2015-01-02T10:38:05+00:00
+                [2015-01-02T10:38:05+00:00] building co_matrix, item count: 22
+[INFO] building recommendation @ 2015-01-02T10:38:05+00:00
+[INFO] left matrix prepared, total target: 3 @ 2015-01-02T10:38:05+00:00
+[INFO] right matrix prepared, total target: 5 @ 2015-01-02T10:38:05+00:00
+                [2015-01-02T10:38:05+00:00] left matrix prepared, total target: 3
+                [2015-01-02T10:38:05+00:00] right matrix prepared, total target: 5
+                [2015-01-02T10:38:05+00:00] finish matrix multiplication
+
+
+
+[DONE] Step 0: Reset database
+[DONE] Step 1: Import data count:                       [2015-01-02T10:38:05+00:00] raw count:  8
+[DONE] Step 2: build user-item based record:            [2015-01-02T10:38:05+00:00] user-item:  8
+[DONE] Step 3: find uniq user:                          [2015-01-02T10:38:05+00:00] user:       3
+[DONE] Step 4: find uniq item:                          [2015-01-02T10:38:05+00:00] item:       5
+[DONE] Step 5&6: Item-based Co-Occurrence Matrix:       [2015-01-02T10:38:05+00:00] total co-matrix count: 22 , out: co_matrix
+[DONE] Step 7: build user-item-based recommendation:    [2015-01-02T10:38:05+00:00] finish matrix multiplication
 $ mongo
 MongoDB shell version: 2.6.6
 connecting to: test
@@ -12,15 +41,15 @@ connecting to: test
 switched to db test
 > show collections
 co_matrix
-co_matrix_init
+co_matrix_prepare
 item
 raw
+rec_matrix_mul_usage
 recommendation
 system.indexes
 user
 user_item
-user_item_list
-user_prefer
+user_item_filter
 > db.recommendation.find()
 { "_id" : { "user" : "a", "item" : "1" }, "value" : 1.7000000000000002 }
 { "_id" : { "user" : "a", "item" : "2" }, "value" : 0.5 }
@@ -80,20 +109,20 @@ db.raw.ensureIndex( { _id : "hashed" } )
 db.user.ensureIndex( { _id : "hashed" } )
 db.item.ensureIndex( { _id : "hashed" } )
 db.user_item.ensureIndex( { _id : "hashed" } )
-db.user_item_list.ensureIndex( { _id : "hashed" } )
 db.co_matrix_prepare.ensureIndex( { _id : "hashed" } )
 db.co_matrix.ensureIndex( { _id : "hashed" } )
-db.user_prefer.ensureIndex( { _id : "hashed" } )
+db.user_item_filter.ensureIndex( { _id : "hashed" } )
+db.rec_matrix_mul_usage.ensureIndex( { _id : "hashed" } )
 
 sh.enableSharding('test')
 sh.shardCollection("test.raw", { "_id": "hashed" } )
 sh.shardCollection("test.user", { "_id": "hashed" } )
 sh.shardCollection("test.item", { "_id": "hashed" } )
 sh.shardCollection("test.user_item", { "_id": "hashed" } )
-sh.shardCollection("test.user_item_list", { "_id": "hashed" } )
 sh.shardCollection("test.co_matrix_prepare", { "_id": "hashed" } )
 sh.shardCollection("test.co_matrix", { "_id": "hashed" } )
-sh.shardCollection("test.user_prefer", { "_id": "hashed" } )
+sh.shardCollection("test.user_item_filter", { "_id": "hashed" } )
+sh.shardCollection("test.rec_matrix_mul_usage", { "_id": "hashed" } )
 
 mongos> sh.status()
 --- Sharding Status ---
